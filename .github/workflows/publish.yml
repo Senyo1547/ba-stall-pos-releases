@@ -1,0 +1,16 @@
+name: Publish download asset
+on:
+  release:
+    types: [published]
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Attach versioned download package
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$RELEASE_TAG" "downloads/stall-studio-$RELEASE_TAG.zip" --repo "$GITHUB_REPOSITORY"
